@@ -30,10 +30,7 @@ if(KUKSA_USE_PKG_CONFIG)
   # Distro differences:
   # - Debian/Ubuntu often ship libprotobuf-c.pc (module: libprotobuf-c)
   # - Other setups may use protobuf-c.pc (module: protobuf-c)
-  pkg_check_modules(PROTOBUF_C QUIET protobuf-c)
-  if(NOT PROTOBUF_C_FOUND)
-    pkg_check_modules(PROTOBUF_C REQUIRED libprotobuf-c)
-  endif()
+  pkg_search_module(PROTOBUF_C REQUIRED IMPORTED_TARGET protobuf-c libprotobuf-c)
 endif()
 
 add_executable(kuksa-c-cli

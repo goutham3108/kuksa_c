@@ -60,6 +60,8 @@ You can verify with:
 pkg-config --modversion libprotobuf-c || pkg-config --modversion protobuf-c
 ```
 
+If `grep -n "pkg_.*PROTOBUF_C" CMakeLists.txt` still shows only `REQUIRED protobuf-c`, your local branch is outdated; pull latest branch changes before configuring.
+
 ## 2) Build
 
 ```bash
