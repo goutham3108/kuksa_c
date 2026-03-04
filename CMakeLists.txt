@@ -26,7 +26,14 @@ endforeach()
 if(KUKSA_USE_PKG_CONFIG)
   find_package(PkgConfig REQUIRED)
   pkg_check_modules(GRPC REQUIRED grpc)
-  pkg_check_modules(PROTOBUF_C REQUIRED protobuf-c)
+
+  # Distro differences:
+  # - Debian/Ubuntu often ship libprotobuf-c.pc (module: libprotobuf-c)
+  # - Other setups may use protobuf-c.pc (module: protobuf-c)
+  pkg_check_modules(PROTOBUF_C QUIET protobuf-c)
+  if(NOT PROTOBUF_C_FOUND)
+    pkg_check_modules(PROTOBUF_C REQUIRED libprotobuf-c)
+  endif()
 endif()
 
 add_executable(kuksa-c-cli

@@ -42,6 +42,24 @@ This creates generated files under `generated/kuksa/val/v1`.
 > by `protoc-c` yet. The generation script automatically creates a temporary
 > sanitized copy (removing the `optional` keyword) so codegen can proceed.
 
+
+## Common WSL fix for `protobuf-c` pkg-config error
+
+If CMake fails with:
+
+```
+Package 'protobuf-c', required by 'virtual:world', not found
+```
+
+it usually means your distro publishes the pkg-config module as `libprotobuf-c`
+instead of `protobuf-c`. The CMake config in this repo now checks both names.
+
+You can verify with:
+
+```bash
+pkg-config --modversion libprotobuf-c || pkg-config --modversion protobuf-c
+```
+
 ## 2) Build
 
 ```bash
