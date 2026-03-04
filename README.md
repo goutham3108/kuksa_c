@@ -2,6 +2,15 @@
 
 C client example for Eclipse KUKSA Databroker gRPC APIs.
 
+## Does this work?
+
+Yes, **if** all prerequisites are installed and protobuf-c sources are generated first.
+Out of the box this repo is a scaffold and will not compile until you:
+
+1. install gRPC C and protobuf-c development packages,
+2. install `protoc` and `protoc-c`,
+3. generate Kuksa protobuf-c files via `scripts/generate_proto.sh`.
+
 ## What this provides
 
 - `kuksa-c-cli get <host:port> <path> [token]`
@@ -35,6 +44,8 @@ This creates generated files under `generated/kuksa/val/v1`.
 cmake -S . -B build
 cmake --build build -j
 ```
+
+If generation has not been run yet, CMake now fails with a clear error telling you which generated file is missing.
 
 ## 3) Run
 
