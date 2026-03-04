@@ -38,6 +38,10 @@ using native gRPC C core and protobuf-c message encoding.
 
 This creates generated files under `generated/kuksa/val/v1`.
 
+> Note: upstream Kuksa proto files use `proto3 optional`, which is not supported
+> by `protoc-c` yet. The generation script automatically creates a temporary
+> sanitized copy (removing the `optional` keyword) so codegen can proceed.
+
 ## 2) Build
 
 ```bash
@@ -52,16 +56,17 @@ If generation has not been run yet, CMake now fails with a clear error telling y
 Set a value:
 
 ```bash
-./build/kuksa-c-cli set localhost:55555 Vehicle.Speed 40 <token>
+./build/kuksa-c-cli set localhost:55555 Vehicle.Speed 40 "$TOKEN"
 ```
 
 Read a value:
 
 ```bash
-./build/kuksa-c-cli get localhost:55555 Vehicle.Speed <token>
+./build/kuksa-c-cli get localhost:55555 Vehicle.Speed "$TOKEN"
 ```
 
 ## Notes
 
 - This example focuses on `Get` and `Set` so you can migrate from CLI-based flows to direct gRPC calls.
 - You can extend the same pattern to `Subscribe`, `Actuate`, and metadata queries by adding request/response message handling for those RPC methods.
+- Do not type `<token>` literally in the shell (`<` and `>` are redirection operators); use a real JWT string or a variable such as `$TOKEN`.
