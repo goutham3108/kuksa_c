@@ -8,10 +8,12 @@ option(KUKSA_USE_PKG_CONFIG "Resolve gRPC/protobuf-c through pkg-config" ON)
 set(KUKSA_GENERATED_DIR "${CMAKE_CURRENT_SOURCE_DIR}/generated" CACHE PATH "Directory containing generated protobuf-c files")
 
 set(KUKSA_PROTO_SRCS
+    "${KUKSA_GENERATED_DIR}/google/protobuf/timestamp.pb-c.c"
     "${KUKSA_GENERATED_DIR}/kuksa/val/v1/types.pb-c.c"
     "${KUKSA_GENERATED_DIR}/kuksa/val/v1/val.pb-c.c")
 
 set(KUKSA_PROTO_HDRS
+    "${KUKSA_GENERATED_DIR}/google/protobuf/timestamp.pb-c.h"
     "${KUKSA_GENERATED_DIR}/kuksa/val/v1/types.pb-c.h"
     "${KUKSA_GENERATED_DIR}/kuksa/val/v1/val.pb-c.h")
 

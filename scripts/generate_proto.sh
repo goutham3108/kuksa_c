@@ -35,20 +35,37 @@ if [[ ! -f "$TYPES_PROTO" || ! -f "$VAL_PROTO" ]]; then
   exit 1
 fi
 
+# timestamp.proto is imported by kuksa val protos via google.protobuf.Timestamp.
+PROTOBUF_INCLUDE_DIR=""
+for candidate in /usr/include /usr/local/include; do
+  if [[ -f "$candidate/google/protobuf/timestamp.proto" ]]; then
+    PROTOBUF_INCLUDE_DIR="$candidate"
+    break
+  fi
+done
+
+if [[ -z "$PROTOBUF_INCLUDE_DIR" ]]; then
+  echo "Could not find google/protobuf/timestamp.proto (checked /usr/include and /usr/local/include)."
+  echo "Install protobuf development headers (e.g. protobuf-compiler/libprotobuf-dev)."
+  exit 1
+fi
+
 mkdir -p "$OUT_DIR"
 
 # protobuf-c (protoc-c) does not yet support `optional` fields in proto3.
 # Current kuksa-databroker protos use that feature, so we generate from a
 # temporary sanitized copy by removing the `optional` keyword.
-mkdir -p "$TMP_PROTO_DIR/kuksa/val/v1"
+mkdir -p "$TMP_PROTO_DIR/kuksa/val/v1" "$TMP_PROTO_DIR/google/protobuf"
 sed -E 's/^([[:space:]]*)optional[[:space:]]+/\1/' "$TYPES_PROTO" > "$TMP_PROTO_DIR/kuksa/val/v1/types.proto"
 sed -E 's/^([[:space:]]*)optional[[:space:]]+/\1/' "$VAL_PROTO" > "$TMP_PROTO_DIR/kuksa/val/v1/val.proto"
+cp "$PROTOBUF_INCLUDE_DIR/google/protobuf/timestamp.proto" "$TMP_PROTO_DIR/google/protobuf/timestamp.proto"
 
 echo "Note: proto3 'optional' fields were sanitized for protobuf-c compatibility."
 
 protoc-c \
   -I "$TMP_PROTO_DIR" \
   --c_out="$OUT_DIR" \
+  "$TMP_PROTO_DIR/google/protobuf/timestamp.proto" \
   "$TMP_PROTO_DIR/kuksa/val/v1/types.proto" \
   "$TMP_PROTO_DIR/kuksa/val/v1/val.proto"
 

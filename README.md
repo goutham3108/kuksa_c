@@ -36,7 +36,7 @@ using native gRPC C core and protobuf-c message encoding.
 ./scripts/generate_proto.sh /path/to/kuksa-databroker
 ```
 
-This creates generated files under `generated/kuksa/val/v1`.
+This creates generated files under `generated/kuksa/val/v1` and also generates `generated/google/protobuf/timestamp.pb-c.*` required by Kuksa messages.
 
 > Note: upstream Kuksa proto files use `proto3 optional`, which is not supported
 > by `protoc-c` yet. The generation script automatically creates a temporary
